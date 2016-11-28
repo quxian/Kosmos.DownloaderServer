@@ -7,6 +7,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kosmos.DownloaderServer", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kosmos.DownloaderServer.Tests", "Kosmos.DownloaderServer.Tests\Kosmos.DownloaderServer.Tests.csproj", "{9C649095-6B82-42E1-8EEB-F8E96DDAE0B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kosmos.DownloaderServer.Model", "Kosmos.DownloaderServer.Model\Kosmos.DownloaderServer.Model.csproj", "{C3AFD3F7-25C7-41F7-AA07-16C3A41CBF6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kosmos.DownloaderServer.DbContext", "Kosmos.DownloaderServer.DbContext\Kosmos.DownloaderServer.DbContext.csproj", "{2BC628F2-1C30-458F-99B7-5A85B15DC7A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kosmos.DownloaderServer.ModelDbMappings", "Kosmos.DownloaderServer.ModelDbMappings\Kosmos.DownloaderServer.ModelDbMappings.csproj", "{B3C9554A-8A72-4467-9DD7-1A7627969BC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extended", "Extended\Extended.csproj", "{3E5E728E-283A-4B53-B9B9-1CAF8034A361}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kosmos.DownloadServer.TestsForConsoleApp", "Kosmos.DownloadServer.TestsForConsoleApp\Kosmos.DownloadServer.TestsForConsoleApp.csproj", "{1082F1E5-AA55-4F85-ABDF-14B9548E5128}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +31,26 @@ Global
 		{9C649095-6B82-42E1-8EEB-F8E96DDAE0B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C649095-6B82-42E1-8EEB-F8E96DDAE0B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C649095-6B82-42E1-8EEB-F8E96DDAE0B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3AFD3F7-25C7-41F7-AA07-16C3A41CBF6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3AFD3F7-25C7-41F7-AA07-16C3A41CBF6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3AFD3F7-25C7-41F7-AA07-16C3A41CBF6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3AFD3F7-25C7-41F7-AA07-16C3A41CBF6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BC628F2-1C30-458F-99B7-5A85B15DC7A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BC628F2-1C30-458F-99B7-5A85B15DC7A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BC628F2-1C30-458F-99B7-5A85B15DC7A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BC628F2-1C30-458F-99B7-5A85B15DC7A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3C9554A-8A72-4467-9DD7-1A7627969BC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3C9554A-8A72-4467-9DD7-1A7627969BC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3C9554A-8A72-4467-9DD7-1A7627969BC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3C9554A-8A72-4467-9DD7-1A7627969BC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E5E728E-283A-4B53-B9B9-1CAF8034A361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E5E728E-283A-4B53-B9B9-1CAF8034A361}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E5E728E-283A-4B53-B9B9-1CAF8034A361}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E5E728E-283A-4B53-B9B9-1CAF8034A361}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1082F1E5-AA55-4F85-ABDF-14B9548E5128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1082F1E5-AA55-4F85-ABDF-14B9548E5128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1082F1E5-AA55-4F85-ABDF-14B9548E5128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1082F1E5-AA55-4F85-ABDF-14B9548E5128}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

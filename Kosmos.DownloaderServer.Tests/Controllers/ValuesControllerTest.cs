@@ -7,6 +7,7 @@ using System.Web.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Kosmos.DownloaderServer;
 using Kosmos.DownloaderServer.Controllers;
+using Kosmos.DownloaderServer.DbContext;
 
 namespace Kosmos.DownloaderServer.Tests.Controllers {
     [TestClass]
@@ -14,7 +15,7 @@ namespace Kosmos.DownloaderServer.Tests.Controllers {
         [TestMethod]
         public void Get() {
             // Arrange
-            ValuesController controller = new ValuesController();
+            ValuesController controller = new ValuesController(new AppDbContext());
 
             // Act
             IEnumerable<string> result = controller.Get();
@@ -26,49 +27,5 @@ namespace Kosmos.DownloaderServer.Tests.Controllers {
             Assert.AreEqual("value2", result.ElementAt(1));
         }
 
-        [TestMethod]
-        public void GetById() {
-            // Arrange
-            ValuesController controller = new ValuesController();
-
-            // Act
-            string result = controller.Get(5);
-
-            // Assert
-            Assert.AreEqual("value", result);
-        }
-
-        [TestMethod]
-        public void Post() {
-            // Arrange
-            ValuesController controller = new ValuesController();
-
-            // Act
-            controller.Post("value");
-
-            // Assert
-        }
-
-        [TestMethod]
-        public void Put() {
-            // Arrange
-            ValuesController controller = new ValuesController();
-
-            // Act
-            controller.Put(5, "value");
-
-            // Assert
-        }
-
-        [TestMethod]
-        public void Delete() {
-            // Arrange
-            ValuesController controller = new ValuesController();
-
-            // Act
-            controller.Delete(5);
-
-            // Assert
-        }
     }
 }

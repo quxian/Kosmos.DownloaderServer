@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Kosmos.DownloaderServer;
 using Kosmos.DownloaderServer.Controllers;
+using Kosmos.DownloaderServer.DbContext;
 
 namespace Kosmos.DownloaderServer.Tests.Controllers {
     [TestClass]
@@ -9,7 +10,7 @@ namespace Kosmos.DownloaderServer.Tests.Controllers {
         [TestMethod]
         public void Index() {
             // Arrange
-            HomeController controller = new HomeController();
+            HomeController controller = new HomeController(new AppDbContext());
 
             // Act
             ViewResult result = controller.Index() as ViewResult;
