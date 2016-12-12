@@ -1,5 +1,6 @@
 ﻿using Kosmos.DownloaderServer.DbContext;
 using Kosmos.DownloaderServer.Model;
+using Kosmos.Singleton;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,6 +63,7 @@ namespace Kosmos.DownloaderServer.Controllers {
                 if (null == _dbContext.ExtractTasks.AsParallel().FirstOrDefault(extractTask => extractTask.Name == name))
                     return Ok($"任务已完成：{name}！");
             } catch (Exception e) {
+                SingleHttpClient.PostException(e);
 
                 return BadRequest(e.Message);
             }
@@ -74,6 +76,7 @@ namespace Kosmos.DownloaderServer.Controllers {
 
                 return Ok(downloadedResult);
             } catch (Exception e) {
+                SingleHttpClient.PostException(e);
 
                 return BadRequest(e.Message);
             }

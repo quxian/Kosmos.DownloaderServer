@@ -1,7 +1,8 @@
-﻿using Extended;
-using Kosmos.DownloaderServer.DbContext;
+﻿using Kosmos.DownloaderServer.DbContext;
 using Kosmos.DownloaderServer.Model;
+using Kosmos.Singleton;
 using Newtonsoft.Json;
+using StringExtensionForYongsheng;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -13,14 +14,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 
-namespace Kosmos.DownloaderServer.Controllers {
-    public class DownloadController : ApiController {
+namespace Kosmos.DownloaderServer.Controllers
+{
+    public class DownloadController : ApiController
+    {
 
         private readonly AppDbContext _dbContext;
         private readonly HttpClient _httpClient;
         private readonly DateTime _dateTime = DateTime.Now;
 
-        public DownloadController(AppDbContext dbContext, HttpClient httpClient) {
+        public DownloadController(AppDbContext dbContext, HttpClient httpClient)
+        {
             _dbContext = dbContext;
             _httpClient = httpClient;
         }
@@ -30,94 +34,85 @@ namespace Kosmos.DownloaderServer.Controllers {
         /// </summary>
         /// <param name="url">url</param>
         /// <returns>下载结果</returns>
-        public async Task<IHttpActionResult> Get(string url) {
-            try {
-                var result = await _httpClient.GetStringAsync(url);
+        public async Task<IHttpActionResult> Get(Models.Url url)
+        {
+            return await DoDownload(url);
+        }
+
+        private async Task<IHttpActionResult> DoDownload(Models.Url url)
+        {
+            try
+            {
+                var result = "";
+                try
+                {
+                    result = await _httpClient.GetStringAsync(url.Value);
+                }
+                catch (Exception e)
+                {
+                    SingleHttpClient.PostException(e);
+
+                    return BadRequest(e.Message);
+                }
                 var resultHashCode = result.GetMD5HashCode();
 
-                var downloadedResult = await _dbContext.DownloadedResults.FindAsync(resultHashCode);
-                if (await _dbContext.DownloadedResults.FindAsync(resultHashCode) != null) {
-                    return Ok();
-                }
-
-                downloadedResult = new DownloadedResult {
-                    Domain = new Uri(url).Host,
+                var downloadedResult = new DownloadedResult
+                {
+                    Depth = url.Depth,
+                    Domain = new Uri(url.Value).Host,
                     DownloadDate = _dateTime,
                     IsExtracted = false,
                     Result = result,
                     ResultHashCode = resultHashCode,
-                    Url = url
+                    Url = url.Value
                 };
 
-                _dbContext.DownloadedResults.Add(downloadedResult);
-                await _dbContext.SaveChangesAsync();
+                ResultCahce.Results.TryAdd(resultHashCode, downloadedResult);
 
-
-                ThreadPool.QueueUserWorkItem(new WaitCallback(async _ => {
-                    try {
-                        await _httpClient.PostAsJsonAsync("", downloadedResult);
-                    } catch (Exception) {
-                        
+                var task = Task.Run(async () =>
+                {
+                    try
+                    {
+                        var httpResponseMessage = await _httpClient.PostAsJsonAsync($"{ProcesserServersAddressCache.Urls.First()}api/Process", downloadedResult);
+                        if (httpResponseMessage.StatusCode == HttpStatusCode.OK)
+                        {
+                            downloadedResult.IsExtracted = true;
+                            ResultCahce.Results.TryUpdate(downloadedResult.ResultHashCode, downloadedResult, downloadedResult);
+                        }
                     }
-                }));
+                    catch (Exception e)
+                    {
+                        SingleHttpClient.PostException(e);
+                    }
+                });
 
                 return Ok();
-            } catch (Exception) {
+            }
+            catch (Exception e)
+            {
+                SingleHttpClient.PostException(e);
 
-                return BadRequest(url);
+                return BadRequest(url.Value);
             }
         }
 
-        /// <summary>
-        /// 下载指定的url集合
-        /// </summary>
-        /// <param name="urls">urls集合</param>
-        /// <returns>不重复的HTML结果集</returns>
-        public async Task<IHttpActionResult> Post(List<string> urls) {
-            urls = urls.Distinct().ToList();
+        [HttpPost]
+        [Route("api/Download")]
+        public async Task<IHttpActionResult> Post(Models.Url url)
+        {
+            return await DoDownload(url);
+        }
 
-            var errorUrls = new ConcurrentBag<string>();
-            var downloads = urls.Select(async url => {
-                try {
-                    var htmlPage = await _httpClient.GetStringAsync(url);
-                    return new {
-                        Url = url,
-                        HtmlPage = htmlPage
-                    };
-                } catch (Exception) {
-                    errorUrls.Add(url);
-                    return null;
-                }
-
-            });
-
-            var tasks = downloads.ToArray();
-            var results = await Task.WhenAll(tasks);
-
-            var downloadedResults = results
-                .AsParallel()
-                .Where(result => null != result)
-                .Select(result => new DownloadedResult {
-                    Domain = new Uri(result.Url).Host,
-                    DownloadDate = _dateTime,
-                    IsExtracted = false,
-                    LastExtractDate = _dateTime,
-                    Result = result.HtmlPage,
-                    ResultHashCode = result.HtmlPage.GetMD5HashCode(),
-                    Url = result.Url
-                })
-                .Except(_dbContext.DownloadedResults.AsParallel())
-                .ToList();
-            try {
-                _dbContext.DownloadedResults.AddRange(downloadedResults);
-                await _dbContext.SaveChangesAsync();
-            } catch (Exception) {
-
-                return BadRequest(JsonConvert.SerializeObject(urls));
+        [HttpGet]
+        [Route("api/Download/CacheToDb")]
+        public async Task<IHttpActionResult> CacheToDb()
+        {
+            using (var dbContext = new AppDbContext())
+            {
+                ResultCahce.CacheToDb(dbContext);
             }
 
-
-            return Ok(urls.Except(errorUrls));
+            return Ok();
         }
     }
 }

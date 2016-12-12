@@ -22,7 +22,11 @@ namespace Kosmos.DownloaderServer.Model {
         /// </summary>
         public string Url { get; set; }
         /// <summary>
-        /// URI对用的内容
+        /// url深度
+        /// </summary>
+        public int Depth { get; set; }
+        /// <summary>
+        /// URI对应的内容
         /// </summary>
         public string Result { get; set; }
         /// <summary>

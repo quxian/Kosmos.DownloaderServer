@@ -22,8 +22,8 @@ namespace Kosmos.DownloaderServer {
 
             builder.RegisterControllers(Assembly.GetExecutingAssembly());
 
-            builder.RegisterType<AppDbContext>();
-            builder.RegisterType<HttpClient>();
+            builder.RegisterType<AppDbContext>().SingleInstance();
+            builder.RegisterType<HttpClient>().SingleInstance();
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
